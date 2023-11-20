@@ -19,7 +19,7 @@ const config = {
 			fallback: '404.html'
 		}),
 		paths: {
-			base: dev ? '' : '/tmguesser'
+			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
 		}
 		//target: "#svelte"
 	}

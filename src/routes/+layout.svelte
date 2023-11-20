@@ -14,7 +14,7 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<a href="/tmguesser" class="text-xl font-bold uppercase">TM GUesser</a>
+				<a href="/" class="text-xl font-bold uppercase">TM GUesser</a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<a
