@@ -1,0 +1,10 @@
+{
+	"2022": {
+		"fall": {
+			"01": "images/2022/fall_2022_01-%s.jpg",
+			"02": "images/2022/fall_2022_02-%s.jpg",
+			"07": "images/2022/fall_2022_07-%s.jpg",
+			"20": "images/2022/fall_2022_20-%s.jpg"
+		}
+	}
+}

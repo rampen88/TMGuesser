@@ -1,7 +1,3 @@
-export function getRandomNumber(min: number, max: number) {
-	return Math.floor(Math.random() * max) + min;
-}
-
-export function getRandomElement(arr: any[]) {
+export function getRandomElement(arr: unknown[]) {
 	return arr[Math.floor(Math.random() * arr.length)];
 }

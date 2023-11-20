@@ -18,8 +18,10 @@
 
 	onMount(async () => {
 		if (browser) {
+			console.log('Fetching images.json');
 			const response = await fetch('/images.json');
 			image_data = await response.json();
+			console.log('data:', image_data);
 			await setAvailableGuessingOptions();
 
 			newRound();
