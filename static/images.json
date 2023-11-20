@@ -3,8 +3,18 @@
 		"fall": {
 			"01": "images/2022/fall_2022_01-%s.jpg",
 			"02": "images/2022/fall_2022_02-%s.jpg",
+			"03": "images/2022/fall_2022_03-%s.jpg",
+			"04": "images/2022/fall_2022_04-%s.jpg",
+			"05": "images/2022/fall_2022_05-%s.jpg",
+			"06": "images/2022/fall_2022_06-%s.jpg",
 			"07": "images/2022/fall_2022_07-%s.jpg",
+			"08": "images/2022/fall_2022_08-%s.jpg",
+			"09": "images/2022/fall_2022_09-%s.jpg",
+			"10": "images/2022/fall_2022_10-%s.jpg",
 			"20": "images/2022/fall_2022_20-%s.jpg"
+		},
+		"summer": {
+			"05": "images/2022/summer_2022_05-%s.jpg"
 		}
 	}
 }
