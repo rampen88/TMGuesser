@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { getRandomElement } from '$lib/utils';
+	import { base } from '$app/paths';
 
 	let years: string[] = [];
 	let seasons: string[] = [];
@@ -19,7 +20,7 @@
 	onMount(async () => {
 		if (browser) {
 			console.log('Fetching images.json');
-			const response = await fetch('/images.json');
+			const response = await fetch(base + '/images.json');
 			image_data = await response.json();
 			console.log('data:', image_data);
 			await setAvailableGuessingOptions();
@@ -71,7 +72,7 @@
 	}
 
 	async function setAvailableGuessingOptions() {
-		const response = await fetch('/campaigns.json');
+		const response = await fetch(base + '/campaigns.json');
 		const data = await response.json();
 		years = data['years'];
 		seasons = data['seasons'];
