@@ -158,7 +158,7 @@
 			<button
 				class="btn variant-ghost row-start-2 col-start-2"
 				on:click={() => revealNext()}
-				disabled={reveal3}>Hint</button
+				disabled={reveal3 || !guessing}>Hint</button
 			>
 		</div>
 
