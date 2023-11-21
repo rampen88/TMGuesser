@@ -1,4 +1,33 @@
 {
+	"2020": {
+		"summer": {
+			"01": "images/2020/summer_2020_01-%s.jpg",
+			"02": "images/2020/summer_2020_02-%s.jpg",
+			"03": "images/2020/summer_2020_03-%s.jpg",
+			"04": "images/2020/summer_2020_04-%s.jpg",
+			"05": "images/2020/summer_2020_05-%s.jpg",
+			"06": "images/2020/summer_2020_06-%s.jpg",
+			"07": "images/2020/summer_2020_07-%s.jpg",
+			"08": "images/2020/summer_2020_08-%s.jpg",
+			"09": "images/2020/summer_2020_09-%s.jpg",
+			"10": "images/2020/summer_2020_10-%s.jpg",
+			"11": "images/2020/summer_2020_11-%s.jpg",
+			"12": "images/2020/summer_2020_12-%s.jpg",
+			"13": "images/2020/summer_2020_13-%s.jpg",
+			"14": "images/2020/summer_2020_14-%s.jpg",
+			"15": "images/2020/summer_2020_15-%s.jpg",
+			"16": "images/2020/summer_2020_16-%s.jpg",
+			"17": "images/2020/summer_2020_17-%s.jpg",
+			"18": "images/2020/summer_2020_18-%s.jpg",
+			"19": "images/2020/summer_2020_19-%s.jpg",
+			"20": "images/2020/summer_2020_20-%s.jpg",
+			"21": "images/2020/summer_2020_21-%s.jpg",
+			"22": "images/2020/summer_2020_22-%s.jpg",
+			"23": "images/2020/summer_2020_23-%s.jpg",
+			"24": "images/2020/summer_2020_24-%s.jpg",
+			"25": "images/2020/summer_2020_25-%s.jpg"
+		}
+	},
 	"2022": {
 		"fall": {
 			"01": "images/2022/fall_2022_01-%s.jpg",
