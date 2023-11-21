@@ -7,13 +7,14 @@
 	let years: string[] = [];
 	let seasons: string[] = [];
 	let maps: number[] = [];
-	let image_data: any[];
+	let image_data: any;
 
 	let reveal2: boolean, reveal3: boolean;
 	let img1: string, img2: string, img3: string;
 	let selectedYear: string, selectedSeason: string, selectedMap: string;
 	let currYear: string, currSeason: string, currMap: string;
 	let guessing = true;
+	let outOfMaps = false;
 
 	let points = 0;
 	let currRound = 1;
@@ -55,6 +56,10 @@
 	}
 
 	async function newRound() {
+		if (Object.keys(image_data).length == 0) {
+			outOfMaps = true;
+			return;
+		}
 		selectedYear = '';
 		selectedSeason = '';
 		selectedMap = '';
@@ -75,6 +80,15 @@
 		img1 = imagePath.replace('%s', '1');
 		img2 = imagePath.replace('%s', '2');
 		img3 = imagePath.replace('%s', '3');
+
+		// remove map from image data so it doesn't pick it again.
+		delete image_data[newMap.year][newMap.season][currMap];
+		if (Object.keys(image_data[newMap.year][newMap.season]).length == 0) {
+			delete image_data[newMap.year][newMap.season];
+			if (Object.keys(image_data[newMap.year]).length == 0) {
+				delete image_data[newMap.year];
+			}
+		}
 	}
 
 	function getRandomMap() {
@@ -120,72 +134,80 @@
 	}
 </script>
 
-<div class="h-1/6"></div>
-<div class="row-start-3 col-start-3 w-full pb-8 flex flex-col place-items-center gap-2">
-	<div>
-		<h2 class="h2">Round: {currRound}</h2>
+{#if outOfMaps}
+	<div class="h-1/6"></div>
+	<div class="flex flex-col w-full place-items-center gap-2">
+		<h2 class="h2">No more maps :(</h2>
+		<p>Please refresh the page to restart.</p>
 	</div>
-	<div>
-		<h2 class="h2">Points: {points}</h2>
+{:else}
+	<div class="h-1/6"></div>
+	<div class="row-start-3 col-start-3 w-full pb-8 flex flex-col place-items-center gap-2">
+		<div>
+			<h2 class="h2">Round: {currRound}</h2>
+		</div>
+		<div>
+			<h2 class="h2">Points: {points}</h2>
+		</div>
 	</div>
-</div>
-<div class="grid h-full w-full grid-cols-5 grid-rows-4 gap-4">
-	<div class="grid col-span-3 col-start-2 grid-cols-3 gap-4">
-		<img src={img1} class="" alt="no cheating" />
-		<img src={img2} class={reveal2 || !guessing ? '' : 'blur-xl'} alt="no cheating" />
-		<img src={img3} class={reveal3 || !guessing ? '' : 'blur-xl'} alt="no cheating" />
-		<button
-			class="btn variant-ghost row-start-2 col-start-2"
-			on:click={() => revealNext()}
-			disabled={reveal3}>Hint</button
+	<div class="grid h-full w-full grid-cols-5 grid-rows-4 gap-4">
+		<div class="grid col-span-3 col-start-2 grid-cols-3 gap-4">
+			<img src={img1} class="" alt="no cheating" />
+			<img src={img2} class={reveal2 || !guessing ? '' : 'blur-xl'} alt="no cheating" />
+			<img src={img3} class={reveal3 || !guessing ? '' : 'blur-xl'} alt="no cheating" />
+			<button
+				class="btn variant-ghost row-start-2 col-start-2"
+				on:click={() => revealNext()}
+				disabled={reveal3}>Hint</button
+			>
+		</div>
+
+		<div
+			class="row-start-2 col-span-3 col-start-2 h-full w-full flex flex-col place-items-center gap-4 shrink-0"
 		>
-	</div>
+			{#if guessing}
+				<div class="flex flex-row w-full gap-4 shrink-0">
+					<select class="select p-0" bind:value={selectedYear} size="4">
+						{#each years as year}
+							<option value={year}>{year}</option>
+						{/each}
+					</select>
 
-	<div
-		class="row-start-2 col-span-3 col-start-2 h-full w-full flex flex-col place-items-center gap-4 shrink-0"
-	>
-		{#if guessing}
-			<div class="flex flex-row w-full gap-4 shrink-0">
-				<select class="select p-0" bind:value={selectedYear} size="4">
-					{#each years as year}
-						<option value={year}>{year}</option>
-					{/each}
-				</select>
-
-				<select class="select p-0" bind:value={selectedSeason} size="4">
-					{#each seasons as season}
-						<option value={season}>{season}</option>
-					{/each}
-				</select>
-				<select class="select" bind:value={selectedMap} size="4">
-					{#each maps as map}
-						<option value={map}>{map}</option>
-					{/each}
-				</select>
-			</div>
-			<button class="btn variant-filled-primary" on:click={() => finishRound()}>Guess</button>
-		{:else}
-			<div class="card w-1/3 items-center flex place-items-center flex-col">
-				<header class="card-header h2">Result</header>
-				<section class="p-4">
-					<p>Your guess:</p>
-					<p>
-						{selectedYear}
-						{selectedSeason}
-						{selectedMap}
-					</p>
-					<p>Correct Answer:</p>
-					<p>
-						{currYear}
-						{currSeason}
-						{currMap}
-					</p>
-					<p>Points earned: {calculatePointsEarned()}</p>
-				</section>
-				<footer class="card-footer">
-					<button class="btn variant-filled-primary" on:click={() => newRound()}>Next</button>
-				</footer>
-			</div>
-		{/if}
+					<select class="select p-0" bind:value={selectedSeason} size="4">
+						{#each seasons as season}
+							<option value={season}>{season}</option>
+						{/each}
+					</select>
+					<select class="select" bind:value={selectedMap} size="4">
+						{#each maps as map}
+							<option value={map}>{map}</option>
+						{/each}
+					</select>
+				</div>
+				<button class="btn variant-filled-primary" on:click={() => finishRound()}>Guess</button>
+			{:else}
+				<div class="card w-1/3 items-center flex place-items-center flex-col">
+					<header class="card-header h2">Result</header>
+					<section class="p-4">
+						<p>Your guess:</p>
+						<p>
+							{selectedYear}
+							{selectedSeason}
+							{selectedMap}
+						</p>
+						<p>Correct Answer:</p>
+						<p>
+							{currYear}
+							{currSeason}
+							{currMap}
+						</p>
+						<p>Points earned: {calculatePointsEarned()}</p>
+					</section>
+					<footer class="card-footer">
+						<button class="btn variant-filled-primary" on:click={() => newRound()}>Next</button>
+					</footer>
+				</div>
+			{/if}
+		</div>
 	</div>
-</div>
+{/if}
