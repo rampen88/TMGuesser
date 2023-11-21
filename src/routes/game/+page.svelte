@@ -27,22 +27,27 @@
 		}
 	});
 
-	function finishRound() {
-		if (selectedYear == currYear) {
-			points += 1;
-		}
-		if (selectedSeason == currSeason) {
-			points += 1;
+	function calculatePointsEarned() {
+		let pointsEarned = 0;
+		if (selectedYear == currYear && selectedSeason == currSeason) {
+			pointsEarned += 3;
+		} else if (selectedYear == currYear || selectedSeason == currSeason) {
+			pointsEarned += 1;
 		}
 		if (selectedMap == currMap) {
 			if (reveal3) {
-				points += 1;
+				pointsEarned += 1;
 			} else if (reveal2) {
-				points += 2;
+				pointsEarned += 2;
 			} else {
-				points += 3;
+				pointsEarned += 3;
 			}
 		}
+		return pointsEarned;
+	}
+
+	function finishRound() {
+		points += calculatePointsEarned();
 		currRound++;
 		reveal2 = false;
 		reveal3 = false;
@@ -175,6 +180,7 @@
 						{currSeason}
 						{currMap}
 					</p>
+					<p>Points earned: {calculatePointsEarned()}</p>
 				</section>
 				<footer class="card-footer">
 					<button class="btn variant-filled-primary" on:click={() => newRound()}>Next</button>

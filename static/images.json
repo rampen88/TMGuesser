@@ -13,8 +13,26 @@
 			"10": "images/2022/fall_2022_10-%s.jpg",
 			"20": "images/2022/fall_2022_20-%s.jpg"
 		},
+		"spring": {
+			"05": "images/2022/spring_2022_05-%s.jpg",
+			"07": "images/2022/spring_2022_07-%s.jpg"
+		},
 		"summer": {
 			"05": "images/2022/summer_2022_05-%s.jpg"
+		}
+	},
+	"2023": {
+		"spring": {
+			"18": "images/2023/spring_2023_18-%s.jpg",
+			"24": "images/2023/spring_2023_24-%s.jpg"
+		},
+		"summer": {
+			"08": "images/2023/summer_2023_08-%s.jpg",
+			"25": "images/2023/summer_2023_25-%s.jpg"
+		},
+		"winter": {
+			"10": "images/2023/winter_2023_10-%s.jpg",
+			"24": "images/2023/winter_2023_24-%s.jpg"
 		}
 	}
 }
