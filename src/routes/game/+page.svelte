@@ -13,18 +13,16 @@
 	let img1: string, img2: string, img3: string;
 	let selectedYear: string, selectedSeason: string, selectedMap: string;
 	let currYear: string, currSeason: string, currMap: string;
+	let guessing = true;
 
 	let points = 0;
 	let currRound = 1;
 
 	onMount(async () => {
 		if (browser) {
-			console.log('Fetching images.json');
 			const response = await fetch(base + '/images.json');
 			image_data = await response.json();
-			console.log('data:', image_data);
 			await setAvailableGuessingOptions();
-
 			newRound();
 		}
 	});
@@ -46,29 +44,54 @@
 			}
 		}
 		currRound++;
-		selectedYear = '';
-		selectedSeason = '';
-		selectedMap = '';
 		reveal2 = false;
 		reveal3 = false;
-		newRound();
+		guessing = false;
 	}
 
 	async function newRound() {
-		const keys = Object.keys(image_data);
-		currYear = getRandomElement(keys);
+		selectedYear = '';
+		selectedSeason = '';
+		selectedMap = '';
+		guessing = true;
 
-		const seasons = Object.keys(image_data[currYear]);
-		currSeason = getRandomElement(seasons);
+		// Keep picking maps until it finds a new one.
+		// TODO: Remove previously seen maps from the array instead.
+		let newMap = getRandomMap();
+		while (newMap.year == currYear && newMap.season == currSeason && newMap.map == currMap) {
+			newMap = getRandomMap();
+		}
 
-		const maps = image_data[currYear][currSeason];
-		const mapKeys = Object.keys(maps);
-		currMap = getRandomElement(mapKeys);
+		currYear = newMap.year;
+		currSeason = newMap.season;
+		currMap = newMap.map;
 
-		const imagePath = maps[currMap];
+		const imagePath = newMap.map_data[currMap];
 		img1 = imagePath.replace('%s', '1');
 		img2 = imagePath.replace('%s', '2');
 		img3 = imagePath.replace('%s', '3');
+	}
+
+	function getRandomMap() {
+		const keys = Object.keys(image_data);
+		const sYear = getRandomElement(keys) as string;
+
+		const season_data = image_data[sYear];
+		const seasons = Object.keys(season_data);
+		const sSeason = getRandomElement(seasons) as string;
+
+		const maps = season_data[sSeason];
+		const mapKeys = Object.keys(maps);
+		const sMap = getRandomElement(mapKeys) as string;
+
+		const obj = {
+			year: sYear,
+			season: sSeason,
+			map: sMap,
+			map_data: maps
+		};
+		console.log('Selected map:', obj);
+		return obj;
 	}
 
 	async function setAvailableGuessingOptions() {
@@ -104,8 +127,8 @@
 <div class="grid h-full w-full grid-cols-5 grid-rows-4 gap-4">
 	<div class="grid col-span-3 col-start-2 grid-cols-3 gap-4">
 		<img src={img1} class="" alt="no cheating" />
-		<img src={img2} class={reveal2 ? '' : 'blur-lg'} alt="no cheating" />
-		<img src={img3} class={reveal3 ? '' : 'blur-lg'} alt="no cheating" />
+		<img src={img2} class={reveal2 || !guessing ? '' : 'blur-xl'} alt="no cheating" />
+		<img src={img3} class={reveal3 || !guessing ? '' : 'blur-xl'} alt="no cheating" />
 		<button
 			class="btn variant-ghost row-start-2 col-start-2"
 			on:click={() => revealNext()}
@@ -116,24 +139,47 @@
 	<div
 		class="row-start-2 col-span-3 col-start-2 h-full w-full flex flex-col place-items-center gap-4 shrink-0"
 	>
-		<div class="flex flex-row w-full gap-4 shrink-0">
-			<select class="select p-0" bind:value={selectedYear} size="4">
-				{#each years as year}
-					<option value={year}>{year}</option>
-				{/each}
-			</select>
+		{#if guessing}
+			<div class="flex flex-row w-full gap-4 shrink-0">
+				<select class="select p-0" bind:value={selectedYear} size="4">
+					{#each years as year}
+						<option value={year}>{year}</option>
+					{/each}
+				</select>
 
-			<select class="select p-0" bind:value={selectedSeason} size="4">
-				{#each seasons as season}
-					<option value={season}>{season}</option>
-				{/each}
-			</select>
-			<select class="select" bind:value={selectedMap} size="4">
-				{#each maps as map}
-					<option value={map}>{map}</option>
-				{/each}
-			</select>
-		</div>
-		<button class="btn variant-filled-primary" on:click={() => finishRound()}>Guess</button>
+				<select class="select p-0" bind:value={selectedSeason} size="4">
+					{#each seasons as season}
+						<option value={season}>{season}</option>
+					{/each}
+				</select>
+				<select class="select" bind:value={selectedMap} size="4">
+					{#each maps as map}
+						<option value={map}>{map}</option>
+					{/each}
+				</select>
+			</div>
+			<button class="btn variant-filled-primary" on:click={() => finishRound()}>Guess</button>
+		{:else}
+			<div class="card w-1/3 items-center flex place-items-center flex-col">
+				<header class="card-header h2">Result</header>
+				<section class="p-4">
+					<p>Your guess:</p>
+					<p>
+						{selectedYear}
+						{selectedSeason}
+						{selectedMap}
+					</p>
+					<p>Correct Answer:</p>
+					<p>
+						{currYear}
+						{currSeason}
+						{currMap}
+					</p>
+				</section>
+				<footer class="card-footer">
+					<button class="btn variant-filled-primary" on:click={() => newRound()}>Next</button>
+				</footer>
+			</div>
+		{/if}
 	</div>
 </div>
